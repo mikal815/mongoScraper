@@ -2,6 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var exphbs = require("express-handlebars");
 
 // Scraping tools
 var axios = require("axios");
@@ -14,6 +15,10 @@ var PORT = 3000;
 
 // Initialize Express
 var app = express();
+
+// app.set('views', path.join(__dirname, 'views'));
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
 // Configure middleware
 
@@ -30,6 +35,9 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
+app.get("/", function(req, res){
+  res.render('home');
+})
 
 // A GET route for scraping The Onion's website
 app.get("/scrape", function(req, res) {
